@@ -1615,7 +1615,7 @@ internal class CodeGeneratorVisitor(val context: Context, val lifetimes: Map<IrE
                 context.interopBuiltIns.objCObjectInitBy -> {
                     val receiver = evaluateExpression(expression.extensionReceiver!!)
                     val irConstructorCall = expression.getValueArgument(0) as IrCall
-                    val constructorDescriptor = irConstructorCall.descriptor as ClassConstructorDescriptor
+                    val constructorDescriptor = irConstructorCall.symbol.owner as ClassConstructorDescriptor
                     val constructorArgs = evaluateExplicitArgs(irConstructorCall)
                     val args = listOf(receiver) + constructorArgs
                     callDirect(constructorDescriptor, args, Lifetime.IRRELEVANT)

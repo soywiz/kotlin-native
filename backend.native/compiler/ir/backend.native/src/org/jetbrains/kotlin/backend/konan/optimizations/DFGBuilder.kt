@@ -113,7 +113,7 @@ private class VariableValues {
             if (element !is IrGetValue)
                 result += element
             else {
-                val descriptor = element.descriptor
+                val descriptor = element.symbol.owner
                 if (descriptor is VariableDescriptor && !seen.contains(descriptor))
                     dfs(descriptor, seen, result)
             }
