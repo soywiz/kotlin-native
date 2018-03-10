@@ -220,15 +220,5 @@ tailrec internal fun DeclarationDescriptor.findPackage(): PackageFragmentDescrip
             ?: (parent as DeclarationDescriptor).findPackage()
 }
 
-internal fun DeclarationDescriptor.allContainingDeclarations(): List<DeclarationDescriptor> {
-    var list = mutableListOf<DeclarationDescriptor>()
-    var current = this.containingDeclaration
-    while (current != null) {
-        list.add(current)
-        current = current.containingDeclaration
-    }
-    return list
-}
-
 fun FunctionDescriptor.isComparisonDescriptor(map: Map<SimpleType, IrSimpleFunction>): Boolean =
         this in map.values

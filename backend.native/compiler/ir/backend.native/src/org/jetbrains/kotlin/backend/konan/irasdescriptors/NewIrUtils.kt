@@ -43,7 +43,7 @@ import org.jetbrains.kotlin.types.TypeUtils
 val IrConstructor.constructedClass get() = this.parent as IrClass
 
 val <T : IrDeclaration> T.original get() = this
-val IrDeclaration.containingDeclaration get() = this.parent as? IrDeclaration
+val IrDeclaration.containingDeclaration get() = this.parent
 
 val IrDeclarationParent.fqNameSafe: FqName get() = when (this) {
     is IrPackageFragment -> this.fqName

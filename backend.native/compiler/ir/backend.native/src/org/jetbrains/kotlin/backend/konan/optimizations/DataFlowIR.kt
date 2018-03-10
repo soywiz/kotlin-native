@@ -503,21 +503,8 @@ internal object DataFlowIR {
         fun mapType(type: KotlinType) = mapClass(type.erasure(context).single())
 
         // TODO: use from LlvmDeclarations.
-        private fun getFqName(descriptor: DeclarationDescriptor): FqName {
-            if (descriptor is PackageFragmentDescriptor) {
-                return descriptor.fqName
-            }
-
-            val containingDeclaration = descriptor.containingDeclaration
-            val parent = if (containingDeclaration != null) {
-                getFqName(containingDeclaration)
-            } else {
-                FqName.ROOT
-            }
-
-            val localName = descriptor.name
-            return parent.child(localName)
-        }
+        private fun getFqName(descriptor: DeclarationDescriptor): FqName =
+                descriptor.parent.fqNameSafe.child(descriptor.name)
 
         private val FunctionDescriptor.internalName get() = getFqName(this).asString() + "#internal"
 

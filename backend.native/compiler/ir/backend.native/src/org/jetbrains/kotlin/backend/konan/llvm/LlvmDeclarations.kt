@@ -177,10 +177,6 @@ private class DeclarationsGeneratorVisitor(override val context: Context) :
     }
 
     private fun getFqName(descriptor: DeclarationDescriptor): FqName {
-        if (descriptor is PackageFragmentDescriptor) {
-            return descriptor.fqName
-        }
-
         val parent = descriptor.parent
         val parentFqName = when (parent) {
             is IrPackageFragment -> parent.fqName
