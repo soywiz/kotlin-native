@@ -33,6 +33,55 @@ class MingwConfigurablesImpl(target: KonanTarget, properties: Properties, baseDi
 class WasmConfigurablesImpl(target: KonanTarget, properties: Properties, baseDir: String?)
     : WasmConfigurables, KonanPropertiesLoader(target, properties, baseDir)
 
+class PsvitaConfigurablesImpl(override val target: KonanTarget, properties: Properties, baseDir: String?)
+    : Configurables, KonanPropertiesLoader(target, properties, baseDir) {
+    override val dependencies get() = ArrayList<String>()
+    val directory = ""
+
+    override fun targetString(key: String): String? {
+        return when (key) {
+            "targetSysRoot" -> "targetSysRoot"
+            "quadruple" -> "arm-vita-eabi"
+            "arch" -> "arm"
+            else -> "psvita-targetString-$key"
+        }
+    }
+
+    override fun targetList(key: String): List<String> {
+        return when (key) {
+            else -> ArrayList(listOf("---psvita-targetList-$key"))
+        }
+    }
+
+    override fun hostString(key: String): String? {
+        return when (key) {
+            "llvmHome" -> "/usr/local/vitasdk/arm-vita-eabi"
+            else -> "$key"
+        }
+    }
+
+    override fun hostList(key: String): List<String> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun hostTargetString(key: String): String? {
+        return "PSVITA_TARGET_TOOLCHAIN"
+    }
+
+    override fun hostTargetList(key: String): List<String> {
+        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return listOf()
+    }
+
+    override fun absolute(value: String?): String {
+        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return value ?: ""
+    }
+
+    override fun downloadDependencies() {
+    }
+}
+
 class ZephyrConfigurablesImpl(target: KonanTarget, properties: Properties, baseDir: String?)
     : ZephyrConfigurables, KonanPropertiesLoader(target, properties, baseDir)
 
@@ -50,6 +99,8 @@ fun loadConfigurables(target: KonanTarget, properties: Properties, baseDir: Stri
             MingwConfigurablesImpl(target, properties, baseDir)
         KonanTarget.WASM32 ->
             WasmConfigurablesImpl(target, properties, baseDir)
+        KonanTarget.PSVITA_ARM32 ->
+            PsvitaConfigurablesImpl(target, properties, baseDir)
         is KonanTarget.ZEPHYR ->
             ZephyrConfigurablesImpl(target, properties, baseDir)
     }

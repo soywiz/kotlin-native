@@ -53,6 +53,8 @@ sealed class KonanTarget(override val name: String, val family: Family, val arch
 
     // Tunable targets
     class ZEPHYR(val subName: String, val genericName: String = "zephyr") : KonanTarget("${genericName}_$subName", Family.ZEPHYR, Architecture.ARM32, "${genericName}_$subName")
+
+    object PSVITA_ARM32 :  KonanTarget( "psvita",   Family.ZEPHYR, Architecture.ARM32,     "psvita")
 }
 
 fun hostTargetSuffix(host: KonanTarget, target: KonanTarget) =
@@ -119,7 +121,7 @@ open class HostManager(protected val distribution: Distribution = Distribution()
     fun targetManager(userRequest: String? = null): TargetManager = TargetManagerImpl(userRequest, this)
 
     // TODO: need a better way to enumerated predefined targets.
-    private val predefinedTargets = listOf(ANDROID_ARM32, ANDROID_ARM64, IOS_ARM64, IOS_X64, LINUX_X64, MINGW_X64, MACOS_X64, LINUX_ARM32_HFP, LINUX_MIPS32, LINUX_MIPSEL32, WASM32)
+    private val predefinedTargets = listOf(ANDROID_ARM32, ANDROID_ARM64, IOS_ARM64, IOS_X64, LINUX_X64, MINGW_X64, MACOS_X64, LINUX_ARM32_HFP, LINUX_MIPS32, LINUX_MIPSEL32, WASM32, PSVITA_ARM32)
 
     private val zephyrSubtargets = distribution.availableSubTarget("zephyr").map { ZEPHYR(it) }
 
@@ -161,11 +163,13 @@ open class HostManager(protected val distribution: Distribution = Distribution()
                     KonanTarget.LINUX_MIPSEL32,
                     KonanTarget.ANDROID_ARM32,
                     KonanTarget.ANDROID_ARM64,
-                    KonanTarget.WASM32
+                    KonanTarget.WASM32,
+                    KonanTarget.PSVITA_ARM32
                 ) + zephyrSubtargets
                 KonanTarget.MINGW_X64 -> listOf(
                     KonanTarget.MINGW_X64,
-                    KonanTarget.WASM32
+                    KonanTarget.WASM32,
+                    KonanTarget.PSVITA_ARM32
                 ) + zephyrSubtargets
                 KonanTarget.MACOS_X64 -> listOf(
                     KonanTarget.MACOS_X64,
@@ -173,7 +177,8 @@ open class HostManager(protected val distribution: Distribution = Distribution()
                     KonanTarget.IOS_X64,
                     KonanTarget.ANDROID_ARM32,
                     KonanTarget.ANDROID_ARM64,
-                    KonanTarget.WASM32
+                    KonanTarget.WASM32,
+                    KonanTarget.PSVITA_ARM32
                 ) + zephyrSubtargets
                 else ->
                     throw TargetSupportException("Unknown host platform: $host")

@@ -88,7 +88,7 @@ sealed class DependencySource {
  * Inspects [dependencies] and downloads all the missing ones into [dependenciesDirectory] from [dependenciesUrl].
  * If [airplaneMode] is true will throw a RuntimeException instead of downloading.
  */
-class DependencyProcessor(dependenciesRoot: File,
+class DependencyProcessor @JvmOverloads constructor(dependenciesRoot: File,
                           val dependenciesUrl: String,
                           dependencyToCandidates: Map<String, List<DependencySource>>,
                           homeDependencyCache: String = DEFAULT_HOME_DEPENDENCY_CACHE,
@@ -123,7 +123,7 @@ class DependencyProcessor(dependenciesRoot: File,
             dependenciesUrl,
             keepUnstable = keepUnstable)
 
-    constructor(dependenciesRoot: File,
+    @JvmOverloads constructor(dependenciesRoot: File,
                 properties: Properties,
                 dependencies: List<String>,
                 dependenciesUrl: String = properties.dependenciesUrl,
@@ -238,13 +238,20 @@ class DependencyProcessor(dependenciesRoot: File,
         return when (candidate) {
             is DependencySource.Local -> candidate.path
             is DependencySource.Remote -> File(dependenciesDirectory, dependency)
-            null -> error("$dependency not declared as dependency")
+            null -> {
+                println("WARNING: $dependency not declared as dependency for $dependenciesDirectory")
+                File(dependenciesDirectory, dependency)
+            }
         }
     }
 
     fun resolveRelative(relative: String): File {
         val path = Paths.get(relative)
-        if (path.isAbsolute) error("not a relative path: $relative")
+        if (path.isAbsolute) {
+            //error("not a relative path: $relative")
+            println("WARNING: not a relative path: $relative")
+            return path.toFile()
+        }
 
         val dependency = path.first().toString()
         return resolveDependency(dependency).let {

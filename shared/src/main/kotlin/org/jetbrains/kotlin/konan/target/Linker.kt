@@ -318,6 +318,7 @@ fun linker(configurables: Configurables): LinkerFlags  =
             MingwLinker(configurables as MingwConfigurables)
         KonanTarget.WASM32 ->
             WasmLinker(configurables as WasmConfigurables)
+        KonanTarget.PSVITA_ARM32 -> TODO()
         is KonanTarget.ZEPHYR ->
             ZephyrLinker(configurables as ZephyrConfigurables)
     }

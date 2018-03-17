@@ -1,0 +1,5 @@
+package = platform.ctrl
+
+# /usr/local/vitasdk/arm-vita-eabi/include/psp2/ctrl.h
+# dist/bin/cinterop -def platformLibs/src/platform/psvita/ctrl.def -compilerOpts "-I /usr/local/vitasdk/arm-vita-eabi/include"
+headers = psp2/ctrl.h

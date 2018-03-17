@@ -31,6 +31,7 @@ import java.nio.file.*
 import java.util.*
 
 fun main(args: Array<String>) {
+    //val args = arrayOf("-def", "platformLibs/src/platform/psvita/posix.def")
     processCLib(args)
 }
 
